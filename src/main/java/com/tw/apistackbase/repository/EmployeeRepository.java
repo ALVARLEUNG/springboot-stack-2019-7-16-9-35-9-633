@@ -27,8 +27,8 @@ public class EmployeeRepository {
         return employees.get(employeeId);
     }
 
-    public List<Employee> findByAge(int age) {
-        return employees.values().stream().filter(employee -> employee.getAge() > age).collect(Collectors.toList());
+    public List<Employee> findByGender(String gender) {
+        return employees.values().stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
     }
 
     public List<Employee> save(Employee employee) {
@@ -37,8 +37,9 @@ public class EmployeeRepository {
         return employees.values().stream().collect(Collectors.toList());
     }
 
-    public void delete(String employeeId){
+    public List<Employee> delete(String employeeId){
         employees.remove(employeeId);
+        return employees.values().stream().collect(Collectors.toList());
     }
 
     public void update(Employee employee) {
