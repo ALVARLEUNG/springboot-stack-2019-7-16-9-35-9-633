@@ -31,10 +31,10 @@ public class EmployeeRepository {
         return employees.values().stream().filter(employee -> employee.getAge() > age).collect(Collectors.toList());
     }
 
-    public String save(Employee employee) {
+    public List<Employee> save(Employee employee) {
         String employeeId = UUID.randomUUID().toString();
         employees.put(employeeId,employee);
-        return employeeId;
+        return employees.values().stream().collect(Collectors.toList());
     }
 
     public void delete(String employeeId){
