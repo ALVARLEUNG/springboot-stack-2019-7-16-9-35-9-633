@@ -19,7 +19,7 @@ public class EmployeeController {
         return employeeRepository.findAll();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Employee getEmployeeByID(@PathVariable String id) {
         return employeeRepository.findById(id);
     }
@@ -41,8 +41,8 @@ public class EmployeeController {
     }
 
     @GetMapping("/gender/{gender}")
-    public void findEmployeeByGender(@PathVariable String gender){
-        employeeRepository.findByGender(gender);
+    public List<Employee> findEmployeeByGender(@PathVariable String gender){
+        return  employeeRepository.findByGender(gender);
     }
 
 }
