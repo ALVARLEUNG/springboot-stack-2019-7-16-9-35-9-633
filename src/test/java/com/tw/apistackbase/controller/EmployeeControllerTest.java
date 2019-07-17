@@ -1,8 +1,11 @@
 package com.tw.apistackbase.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jayway.jsonpath.JsonPath;
 import com.tw.apistackbase.model.Employee;
 import com.tw.apistackbase.repository.EmployeeRepository;
+import net.minidev.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -16,8 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -89,5 +93,51 @@ public class EmployeeControllerTest {
 
     }
 
+    @Test
+    public void should_return_employees_when_call_create_employee() throws Exception {
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee("1","a",20,"female",10000);
+        employees.add(employee);
+        Mockito.when(mockEmployeeRepository.save(employee)).thenReturn(employees);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        java.lang.String requestJson = ow.writeValueAsString(employee);
+
+        mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void should_update_employee_when_call_update_employee() throws Exception {
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee("1","a",20,"female",10000);
+        employees.add(employee);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+        java.lang.String requestJson = ow.writeValueAsString(employee);
+
+        mockMvc.perform(post("/employees").contentType(MediaType.APPLICATION_JSON).content(requestJson))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void should_delete_employee_when_call_delete_employee_by_id() throws Exception {
+        List<Employee> employees = new ArrayList<>();
+        Employee employee = new Employee("1","a",20,"female",10000);
+        employees.add(employee);
+
+        Mockito.when(mockEmployeeRepository.delete(employee.getId())).thenReturn(new ArrayList<>());
+
+        mockMvc.perform(delete("/employees/{employeeId}", "1").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk()).andExpect(content().json("[]"));
+
+    }
 
 }

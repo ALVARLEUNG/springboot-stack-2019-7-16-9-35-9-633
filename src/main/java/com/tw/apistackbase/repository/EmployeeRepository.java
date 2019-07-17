@@ -11,9 +11,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class EmployeeRepository {
-    private Map<String, Employee> employees = new HashMap<>();
+    private Map<String, Employee> employees;
 
     public EmployeeRepository() {
+        employees = new HashMap<>();
         employees.put("1",new Employee("1","a",20,"female",10000));
         employees.put("2",new Employee("2","b",21,"male",20000));
         employees.put("3",new Employee("3","c",22,"male",30000));
