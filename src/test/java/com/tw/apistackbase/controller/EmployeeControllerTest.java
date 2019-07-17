@@ -49,4 +49,24 @@ public class EmployeeControllerTest {
 
     }
 
+    @Test
+    public void should_return_employee_when_call_find_employee_by_id_given_id() throws Exception {
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee("1","a",20,"female",10000));
+        Mockito.when(mockEmployeeRepository.findAll()).thenReturn(employees);
+
+        mockMvc.perform(get("/employees").content("1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("[{\n" +
+                        "        \"id\": \"1\",\n" +
+                        "        \"name\": \"a\",\n" +
+                        "        \"age\": 20,\n" +
+                        "        \"gender\": \"female\",\n" +
+                        "        \"salary\": 10000\n" +
+                        "    }]"));
+
+    }
+
+
 }
